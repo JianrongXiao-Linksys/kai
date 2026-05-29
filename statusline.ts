@@ -104,13 +104,14 @@ try { input = JSON.parse(raw); } catch { /* malformed — use defaults */ }
 
 const sessionId    = input.session_id ?? '';
 const currentDir   = input.workspace?.current_dir ?? input.cwd ?? '.';
-const modelName    = input.model?.display_name ?? 'unknown';
+const modelName    = input.model?.display_name ?? process.env.ANTHROPIC_MODEL?.replace(/^.*.anthropic./,'').replace(/-v[0-9:].*/,'') ?? 'unknown';
 const ccVersion    = input.version ?? '';
 const durationMs   = input.cost?.total_duration_ms ?? 0;
 const contextMax   = input.context_window?.context_window_size ?? 200000;
-const contextPct   = input.context_window?.used_percentage ?? 0;
+const contextPctRaw = input.context_window?.used_percentage ?? 0;
 const totalInput   = input.context_window?.total_input_tokens ?? 0;
 const totalOutput  = input.context_window?.total_output_tokens ?? 0;
+const contextPct   = contextPctRaw > 0 ? contextPctRaw : (totalInput > 0 ? Math.min(100, Math.floor((totalInput + totalOutput) * 100 / contextMax)) : 0);
 const dirName      = basename(currentDir) || '.';
 
 // ─── Settings ─────────────────────────────────────────────────────────────────

@@ -13,6 +13,8 @@
 # Timeout override (env var): PAI_HOOK_TIMEOUT_HookName=60 (seconds)
 # Global override:             PAI_HOOK_TIMEOUT=30
 
+export PATH="${HOME}/.bun/bin:${PATH}"
+
 HOOK_NAME="${1:?Usage: run-hook.sh <HookName.hook.ts>}"
 HOOK_PATH="${PAI_DIR:-$HOME/.claude}/hooks/${HOOK_NAME}"
 LOG_DIR="/tmp/pai-hooks"

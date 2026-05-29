@@ -26,6 +26,8 @@ import { atomicWriteJSON } from '../lib/atomic.ts';
 // ── Path resolution ────────────────────────────────────────────────────────
 
 const DEFAULT_PAI_DIR = process.env.PAI_DIR ?? join(process.env.HOME ?? '~', '.claude');
+// Ensure PAI_DIR is available for ${PAI_DIR} expansion in hook commands
+if (!process.env.PAI_DIR) process.env.PAI_DIR = DEFAULT_PAI_DIR;
 
 // ── JSONC parser ───────────────────────────────────────────────────────────
 
