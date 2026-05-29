@@ -512,17 +512,20 @@ if (mode === 'nano') {
 }
 p(SEP);
 
-// Line 1: Context bar
-if (mode === 'normal') {
-  let ctxLine = `${CTX_PRIMARY}◉${R} ${CTX_SECONDARY}CONTEXT:${R} ${bar} ${pctColor}${ctxTokenDisplay}${R} ${SLATE_600}│${R} ${CTX_ACCENT}⏱${R} ${SLATE_300}${timeDisplay}${R}`;
-  if (sessionCostStr) ctxLine += ` ${SLATE_600}│${R} ${USAGE_VALUE}${sessionCostStr}${R}`;
-  p(ctxLine);
-} else if (mode === 'mini') {
-  p(`${CTX_PRIMARY}◉${R} ${CTX_SECONDARY}CONTEXT:${R} ${bar} ${pctColor}${ctxTokenDisplay}${R} ${CTX_ACCENT}⏱${R} ${SLATE_300}${timeDisplay}${R}`);
-} else {
-  p(`${CTX_PRIMARY}◉${R} ${bar} ${pctColor}${ctxTokenDisplay}${R} ${CTX_ACCENT}⏱${R} ${SLATE_300}${timeDisplay}${R}`);
+// Line 1: Context bar (hidden when no data available, e.g. Bedrock)
+const hasContextData = contextPct > 0 || totalInput > 0 || totalOutput > 0 || durationMs > 0;
+if (hasContextData) {
+  if (mode === 'normal') {
+    let ctxLine = `${CTX_PRIMARY}◉${R} ${CTX_SECONDARY}CONTEXT:${R} ${bar} ${pctColor}${ctxTokenDisplay}${R} ${SLATE_600}│${R} ${CTX_ACCENT}⏱${R} ${SLATE_300}${timeDisplay}${R}`;
+    if (sessionCostStr) ctxLine += ` ${SLATE_600}│${R} ${USAGE_VALUE}${sessionCostStr}${R}`;
+    p(ctxLine);
+  } else if (mode === 'mini') {
+    p(`${CTX_PRIMARY}◉${R} ${CTX_SECONDARY}CONTEXT:${R} ${bar} ${pctColor}${ctxTokenDisplay}${R} ${CTX_ACCENT}⏱${R} ${SLATE_300}${timeDisplay}${R}`);
+  } else {
+    p(`${CTX_PRIMARY}◉${R} ${bar} ${pctColor}${ctxTokenDisplay}${R} ${CTX_ACCENT}⏱${R} ${SLATE_300}${timeDisplay}${R}`);
+  }
+  p(SEP);
 }
-p(SEP);
 
 // Line 2: Usage (only if cache exists)
 if (hasUsageCache || usage5h > 0 || usage7d > 0) {
